@@ -1,23 +1,23 @@
-# from django.shortcuts import render
 from django.shortcuts import render
-# from hexlet_django_blog.views import HomePageView
+from django.views import View
 
 
-# class Index(HomePageView):
+from hexlet_django_blog.article.models import Article
 
-#     template_name = 'article/index.html'
 
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         tags = kwargs.get('tags')
-#         article_id = kwargs.get('article_id')
-#         context["tags"] = tags
-#         context["article_id"] = article_id
-#         return context
+class IndexView(View):
 
-def index(request, tags, article_id):
-    return render(
-        request,
-        "article/index.html",
-        context={'article_id': article_id, 'tags': tags}
-    )
+    template_name = 'article/index.html'
+
+    def get(self, request, *args, **kwargs):
+        articles = Article.objects.all()[:15]
+        return render(request, 'articles/index.html', context={
+            'articles': articles,
+        })
+
+# def index(request, tags, article_id):
+#     return render(
+#         request,
+#         "article/index.html",
+#         context={'article_id': article_id, 'tags': tags}
+#     )

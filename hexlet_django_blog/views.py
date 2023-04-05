@@ -6,9 +6,7 @@ from django.shortcuts import redirect, render
 class HomePageView(TemplateView):
 
     def get(self, request):
-        return redirect(reverse(
-            'article', kwargs={'tags': 'python', 'article_id': 42})
-        )
+        return render(request, 'index.html')
 
 
 def about(request):
