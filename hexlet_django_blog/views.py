@@ -1,6 +1,5 @@
-from django.urls import reverse
 from django.views.generic.base import TemplateView
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 
 
 class HomePageView(TemplateView):

@@ -11,10 +11,11 @@
         <ul>
             <li><a href="/">Главная</a></li>
             <li><a href="/article/">Статьи</a></li>
-            <!-- <li><a href=""></a></li> -->
+            <li><a href="/article/create">Написать статью</a></li>
         </ul>
     {% endblock %}
 </div>
+{% include 'messages.html' %}
 <div id="content">
     {% block content %}{% endblock %}
 </div>

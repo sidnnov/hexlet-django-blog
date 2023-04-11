@@ -1,5 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
+from django.contrib import messages
+from hexlet_django_blog.article.forms import ArticleForm
 
 from hexlet_django_blog.article.models import Article
 
@@ -22,7 +24,46 @@ class ArticleView(View):
         })
 
 
-# class ArticleCommentsView(View):
+class ArticleFormCreateView(View):
 
-#     def get(self, request, *args, **kwargs):
-#         comment = get_object_or_404(Comment, )
+    def get(self, request, *args, **kwargs):
+        form = ArticleForm()
+        return render(request, 'articles/create.html', {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Статья успешно добавлена')
+            return redirect('articles')
+        return render(request, 'articles/create.html', {'form': form})
+
+
+class ArticleFormEditView(View):
+
+    def get(self, request, *args, **kwargs):
+        article_id = kwargs.get('id')
+        article = Article.objects.get(id=article_id)
+        form = ArticleForm(instance=article)
+        return render(request, 'articles/update.html', {'form': form, 'article_id': article_id})
+
+    def post(self, request, *args, **kwargs):
+        article_id = kwargs.get('id')
+        article = Article.objects.get(id=article_id)
+        form = ArticleForm(request.POST, instance=article)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Статья успешно отредактирована')
+            return redirect('articles')
+        return render(request, 'articles/update.html', {'form': form, 'article_id': article_id})
+
+
+class ArticleFormDestroyView(View):
+
+    def post(self, request, *args, **kwargs):
+        article_id = kwargs.get('id')
+        article = Article.objects.get(id=article_id)
+        if article:
+            article.delete()
+        messages.success(request, 'Статья успешно удалена')
+        return redirect('articles')
